@@ -24,7 +24,7 @@ uint64_t read_bytes(const char *interface, const char *type)
         return 0;
     }
 
-    if (scanf(fp, "%lu", &bytes) != 1) 
+    if (fscanf(fp, "%lu", &bytes) != 1) 
      {
           printf("Unable to read %s\n", path);
          fclose(fp);
