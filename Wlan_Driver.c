@@ -9,7 +9,6 @@
 #include <net/cfg80211.h>
 #include <linux/types.h>
 #define MAC_LEN 6
-/* Shared by all interfaces */
 /* Separate for each interface */
 struct mon_vif_priv
 {
@@ -53,10 +52,7 @@ static struct ieee80211_supported_band mon_band = {
 
 static int mon_start(struct ieee80211_hw *hw)
 {
-   
-
     pr_info("monitor: driver started\n");
-
     return 0;
 }
 
@@ -80,8 +76,6 @@ static int mon_add_interface(struct ieee80211_hw *hw,struct ieee80211_vif *vif)
    {
        pr_info("Mode:station mode\n");
    }
-
-
         wdev = ieee80211_vif_to_wdev(vif);
 
         if (!wdev) {
@@ -151,8 +145,8 @@ static void mon_configure_filter(struct ieee80211_hw *hw,unsigned int changed_fl
 }
 static void mon_rx(struct ieee80211_hw *hw,struct sk_buff *skb)
 {
-    struct ieee80211_rx_status *rx_status;
-    unsigned int len;
+    struct ieee80211_rx_status *rx_status={0};
+    unsigned int len=0;
 
     if (!skb) {
         pr_err("MON: Invalid RX packet or interface\n");
@@ -260,13 +254,11 @@ if (skb->len >= 2)
     else 
     {
         pr_err("MON: Invalid DATA frame length\n");
-    }
-
-        
+    }        
         break;
      }
     default:
-        pr_info("MON: TX Frame Type = UNKNOWN/EXTENSION\n");
+        pr_info("MON: TX Frame Type = UNKNOWN\n");
         break;
     }
 
@@ -286,8 +278,6 @@ pr_info("MON: Interface = %s\n",vpriv->ndev ? vpriv->ndev->name : "unknown");
 pr_info("MON: TX packets = %lld\n",(long long)vpriv->tx_packets);
 
 pr_info("MON: TX bytes = %lld\n",(long long)vpriv->tx_bytes);
- ieee80211_free_txskb(hw, skb);
-
  mon_rx(hw,skb);
  return;
 
