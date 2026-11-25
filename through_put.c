@@ -1,17 +1,15 @@
 
 #include <stdio.h>
-#include <stdlib.h>
 #include <stdint.h>
-#include <inttypes.h>
 #include <time.h>
 #include <unistd.h>
 
-#define DURATION 1
+#define DURATION 10
 
 uint64_t read_bytes(const char *interface, const char *type)
 {
-    char path[256];
-    FILE *fp;
+    char path[256]={0};
+    FILE *fp=NULL;
     uint64_t bytes = 0;
 
     sprintf(path,"/sys/class/net/%s/statistics/%s",interface, type);
@@ -67,7 +65,7 @@ int main(int argc, char *argv[])
     elapsed = (end.tv_sec - start.tv_sec) +(end.tv_nsec - start.tv_nsec) / 1e9;
 
     if (tx_end < tx_start || rx_end < rx_start) {
-        fprintf(stderr, "Interface counters were reset\n");
+        printf("Interface counters were reset\n");
         return 1;
     }
 
@@ -80,9 +78,9 @@ int main(int argc, char *argv[])
     printf("Interface       : %s\n", interface);
     printf("Elapsed time    : %.3f seconds\n", elapsed);
 
-    printf("TX bytes        : %%%llu\n,tx_end - tx_start);
+    printf("TX bytes        : %lu\n",tx_end - tx_start);
 
-    printf("RX bytes        : %%llu\n"\n",rx_end - rx_start);
+    printf("RX bytes        : %lu\n",rx_end - rx_start);
 
     printf("TX throughput   : %.3f Mbps\n", tx_mbps);
     printf("RX throughput   : %.3f Mbps\n", rx_mbps);
