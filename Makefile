@@ -1,4 +1,4 @@
-obj-m += Driver.o
+obj-m += Wlan_Driver.o
 
 KDIR := /lib/modules/$(shell uname -r)/build
 PWD := $(shell pwd)
