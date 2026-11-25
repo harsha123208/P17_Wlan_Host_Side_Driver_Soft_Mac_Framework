@@ -160,7 +160,7 @@ static void mon_rx(struct ieee80211_hw *hw,struct sk_buff *skb)
     rx_status->freq = 2412;
     pr_info("MON: Passing packet to mac80211 RX\n");
     
-    ieee80211_rx_irqsafe(hw, skb);
+    ieee80211_rx(hw, skb);
 
 }
 static void mon_tx(struct ieee80211_hw *hw,struct ieee80211_tx_control *control,struct sk_buff *skb)
