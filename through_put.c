@@ -24,7 +24,7 @@ uint64_t read_bytes(const char *interface, const char *type)
         return 0;
     }
 
-    if (fscanf(fp, "%lu", &bytes) != 1) 
+    if (scanf(fp, "%lu", &bytes) != 1) 
      {
           printf("Unable to read %s\n", path);
          fclose(fp);
@@ -39,13 +39,13 @@ int main(int argc, char *argv[])
 {
     const char *interface = (argc > 1) ? argv[1] : "wlan1";
 
-    uint64_t tx_start, tx_end;
-    uint64_t rx_start, rx_end;
+    uint64_t tx_start=0, tx_end=0;
+    uint64_t rx_start=0, rx_end=0;
 
-    struct timespec start, end;
+    struct timespec start={0}, end={0};
 
-    double elapsed;
-    double tx_mbps, rx_mbps;
+    double elapsed=0;
+    double tx_mbps=0, rx_mbps=0;
 
     printf("Interface: %s\n", interface);
     printf("Measuring for %d seconds...\n", DURATION);
@@ -64,16 +64,14 @@ int main(int argc, char *argv[])
     tx_end = read_bytes(interface, "tx_bytes");
     rx_end = read_bytes(interface, "rx_bytes");
 
-    elapsed = (end.tv_sec - start.tv_sec) +
-              (end.tv_nsec - start.tv_nsec) / 1e9;
+    elapsed = (end.tv_sec - start.tv_sec) +(end.tv_nsec - start.tv_nsec) / 1e9;
 
     if (tx_end < tx_start || rx_end < rx_start) {
         fprintf(stderr, "Interface counters were reset\n");
         return 1;
     }
 
-    tx_mbps = ((tx_end - tx_start) * 8.0) /
-              (elapsed * 1000000.0);
+    tx_mbps = ((tx_end - tx_start) * 8.0) /(elapsed * 1000000.0);
 
     rx_mbps = ((rx_end - rx_start) * 8.0) /(elapsed * 1000000.0);
 
@@ -82,10 +80,9 @@ int main(int argc, char *argv[])
     printf("Interface       : %s\n", interface);
     printf("Elapsed time    : %.3f seconds\n", elapsed);
 
-    printf("TX bytes        : %" PRIu64 "\n",
-           tx_end - tx_start);
+    printf("TX bytes        : %%%llu\n,tx_end - tx_start);
 
-    printf("RX bytes        : %" PRIu64 "\n",rx_end - rx_start);
+    printf("RX bytes        : %%llu\n"\n",rx_end - rx_start);
 
     printf("TX throughput   : %.3f Mbps\n", tx_mbps);
     printf("RX throughput   : %.3f Mbps\n", rx_mbps);
